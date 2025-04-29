@@ -1,0 +1,15 @@
+{
+  "0": {
+    "needs": 10,
+    "wants": 20,
+    "save": 50,
+    "fk_budgetData": 0
+  },
+
+  "1": {
+    "needs": 20,
+    "wants": 30,
+    "save": 60,
+    "fk_budgetData": 0
+  }
+}

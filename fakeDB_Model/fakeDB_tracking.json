@@ -1,0 +1,23 @@
+{
+  "0": {
+    "category": "food",
+    "paymentMethod": "cash",
+    "amount": 100,
+    "dateOfPayment": "2025-05-01",
+    "repeat": false,
+    "title": "",
+    "note": "",
+    "fk_userData": 0
+  },
+
+  "1": {
+    "category": "groceries",
+    "paymentMethod": "card",
+    "amount": 200,
+    "dateOfPayment": "2025-06-01",
+    "repeat": false,
+    "title": "",
+    "note": "",
+    "fk_userData": 0
+  }
+}
