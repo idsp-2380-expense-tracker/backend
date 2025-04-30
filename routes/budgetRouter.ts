@@ -1,7 +1,7 @@
 import { Router } from "express";
 const router = Router();
 
-router.get("/data", (req, res) => {
+router.get("/", (req, res) => {
   res.json({
     "0": {
       age: 20,
