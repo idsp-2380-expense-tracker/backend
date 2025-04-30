@@ -2,9 +2,23 @@ import express from "express";
 import cors from "cors";
 import apiRouter from "./routes/apiRouter";
 import db from "./database/databaseConnection";
+import { getUserData } from "./database/databaseAccessLayer";
+import { clerkMiddleware } from "@clerk/express";
+
+import "dotenv/config";
+
 const port = 3000;
 
 const app = express();
+// CORS
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    optionsSuccessStatus: 200,
+  })
+);
+// CLERK AUTHENTICATION
+app.use(clerkMiddleware());
 
 async function printMySQLVersion() {
   let sqlQuery = `
@@ -23,15 +37,12 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.use(
-  cors({
-    origin: "http://localhost:5173",
-    optionsSuccessStatus: 200,
-  })
-);
-
 app.use("/api", apiRouter);
 
+app.get("/", async (req, res) => {
+  const userData = await getUserData(1);
+  res.json(userData);
+});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });

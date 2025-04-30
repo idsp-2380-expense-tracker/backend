@@ -6,7 +6,7 @@ const router = Router();
 
 router.use("/user", userRouter);
 
-router.get("test", (req: Request, res: Response) => {
+router.get("/test", (req: Request, res: Response) => {
   res.send("hello");
 });
 
