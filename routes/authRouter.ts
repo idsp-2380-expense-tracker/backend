@@ -2,32 +2,38 @@ import { Router } from "express";
 import userRouter from "./userRouter";
 import { Request, Response } from "express";
 import { clerkClient, requireAuth } from "@clerk/express";
-import { insertUserToDb } from "../database/databaseAccessLayer";
-import { ClerkUser } from "../types/Clerk";
+import { insertUserToDb, checkUserInDb } from "../database/databaseAccessLayer";
+import { ClerkUser } from "../types/User";
 const router = Router();
 
 router.use("/user", userRouter);
 
-router.get(
+router.post(
   "/registerUser",
   requireAuth(),
   async (req: Request, res: Response) => {
     const { userId } = req.auth;
 
-    if (!userId) return;
     try {
-      const user = await clerkClient.users.getUser(userId);
+      const user = await clerkClient.users.getUser(userId!);
 
       const userData: ClerkUser = {
-        userId,
+        userId: userId!,
         firstName: user.firstName!,
         lastName: user.lastName!,
         email: user.emailAddresses[0].emailAddress,
       };
-      await insertUserToDb(userData);
+
+      const existingUser = await checkUserInDb(userId!);
+      if (!existingUser) {
+        await insertUserToDb(userData);
+      }
+
       res.json({ success: true });
     } catch {
-      res.json({ succes: false, error: "failed to register user" });
+      res
+        .status(500)
+        .json({ success: false, error: "failed to register user" });
     }
   }
 );

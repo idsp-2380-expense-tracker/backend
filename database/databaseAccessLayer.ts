@@ -1,5 +1,5 @@
 import database from "./databaseConnection";
-import { ClerkUser } from "../types/Clerk";
+import { ClerkUser, MySQLUser } from "../types/User";
 
 export async function getUserData(userId: number) {
   let sqlQuery = `
@@ -16,7 +16,19 @@ export async function getUserData(userId: number) {
     return null;
   }
 }
-
+export async function checkUserInDb(userId: string) {
+  let sqlQuery = `
+    SELECT * FROM user
+    WHERE user_id = ?
+    `;
+  try {
+    const user = await database.query(sqlQuery, [userId]);
+    return user[0] ?? null;
+  } catch (error) {
+    console.error("Error querying user:", error);
+    return null;
+  }
+}
 export async function insertUserToDb(userData: ClerkUser) {
   let sqlQuery = `
     INSERT INTO user (user_id, first_name, last_name, email)
