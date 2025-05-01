@@ -1,4 +1,5 @@
 import database from "./databaseConnection";
+import { ClerkUser } from "../types/Clerk";
 
 export async function getUserData(userId: number) {
   let sqlQuery = `
@@ -13,5 +14,24 @@ export async function getUserData(userId: number) {
     console.log("Error selecting from user table");
     console.log(err);
     return null;
+  }
+}
+
+export async function insertUserToDb(userData: ClerkUser) {
+  let sqlQuery = `
+    INSERT INTO user (user_id, first_name, last_name, email)
+    VALUES(?,?,?,?)`;
+
+  let params = [
+    userData.userId,
+    userData.firstName,
+    userData.lastName,
+    userData.email,
+  ];
+  try {
+    await database.query(sqlQuery, params);
+    console.log("User inserted successfully");
+  } catch (error) {
+    console.error("Insert failed:", error);
   }
 }
