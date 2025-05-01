@@ -23,10 +23,10 @@ export async function checkUserInDb(userId: string) {
     `;
   try {
     const user = await database.query(sqlQuery, [userId]);
-    return user[0] ?? null;
+    return user[0] ?? false;
   } catch (error) {
     console.error("Error querying user:", error);
-    return null;
+    return false;
   }
 }
 export async function insertUserToDb(userData: ClerkUser) {
