@@ -22,8 +22,8 @@ export async function checkUserInDb(userId: string) {
     WHERE user_id = ?
     `;
   try {
-    const user = await database.query(sqlQuery, [userId]);
-    return !!user[0]; // undefined - true, object - false;
+    const [users] = await database.query<MySQLUser[]>(sqlQuery, [userId]);
+    return !!users[0]; // undefined - true, object - false;
   } catch (error) {
     console.error("Error querying user:", error);
     return false;
