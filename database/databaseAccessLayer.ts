@@ -23,7 +23,7 @@ export async function checkUserInDb(userId: string) {
     `;
   try {
     const user = await database.query(sqlQuery, [userId]);
-    return user[0] ?? false;
+    return !!user[0]; // undefined - true, object - false;
   } catch (error) {
     console.error("Error querying user:", error);
     return false;

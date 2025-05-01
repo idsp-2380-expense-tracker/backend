@@ -25,8 +25,6 @@ router.post(
       };
 
       const existingUser = await checkUserInDb(userId!);
-      console.log(userId);
-      console.log(!existingUser);
       if (!existingUser) {
         await insertUserToDb(userData);
       }
