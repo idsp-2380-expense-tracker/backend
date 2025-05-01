@@ -6,8 +6,9 @@ const router = Router();
 
 router.use("/user", userRouter);
 
-router.get("/checkUser", requireAuth(), (req: Request, res: Response) => {
+router.get("/checkUser", (req: Request, res: Response) => {
   const userData = req.auth;
+  console.log(userData);
   res.json(userData);
 });
 
