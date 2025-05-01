@@ -19,6 +19,7 @@ app.use(
 );
 // CLERK AUTHENTICATION
 app.use(clerkMiddleware());
+app.use(express.json());
 
 async function printMySQLVersion() {
   let sqlQuery = `

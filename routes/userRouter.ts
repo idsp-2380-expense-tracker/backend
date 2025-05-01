@@ -3,7 +3,7 @@ import { clerkClient, requireAuth, getAuth } from "@clerk/express";
 
 const router = Router();
 
-router.get("/data", requireAuth(), async (req, res): Promise<void> => {
+router.get("/data", requireAuth(), async (req, res) => {
   // Use `getAuth()` to get the user's `userId`
   const { userId } = getAuth(req);
   if (!userId) {
