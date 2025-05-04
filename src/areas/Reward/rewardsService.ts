@@ -12,7 +12,7 @@ export class RewardService {
     // put in database logic
     let sqlQuery = `
 		SELECT *
-		FROM reward
+		FROM rewards
         WHERE user_id = ?;
 	`;
     try {
