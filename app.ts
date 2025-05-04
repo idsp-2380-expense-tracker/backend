@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
 import apiRouter from "./routes/apiRouter";
-import db from "./database/databaseConnection";
-import { getUserData } from "./database/databaseAccessLayer";
-import { clerkMiddleware } from "@clerk/express";
-
+import database from "./database/databaseConnection";
+import { clerkMiddleware, requireAuth } from "@clerk/express";
 import "dotenv/config";
 
+import { userController } from "./src/areas/User/userController";
 const port = 3000;
 
 const app = express();
@@ -26,9 +25,8 @@ async function printMySQLVersion() {
   let sqlQuery = `
           SHOW VARIABLES LIKE 'version';
       `;
-
   try {
-    const results = await db.query(sqlQuery);
+    const results = await database.query(sqlQuery);
     console.log("Successfully connected to MySQL");
     console.log(results[0]);
     return true;
@@ -39,12 +37,8 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.use("/api", apiRouter);
+app.get("/", (req, res) => userController.getUserData(req, res));
 
-app.get("/", async (req, res) => {
-  const userData = await getUserData(1);
-  res.json(userData);
-});
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
