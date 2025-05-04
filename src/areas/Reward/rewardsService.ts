@@ -13,7 +13,7 @@ export class RewardService {
     let sqlQuery = `
 		SELECT *
 		FROM rewards
-        WHERE user_id = ?;
+        WHERE userId = ?;
 	`;
     try {
       const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [

@@ -13,7 +13,7 @@ export class BudgetService {
     let sqlQuery = `
         SELECT *
         FROM budget
-        WHERE user_id = ?;
+        WHERE userId = ?;
     `;
     try {
       const [rows] = await this._database.query<DB_Budget[]>(sqlQuery, [

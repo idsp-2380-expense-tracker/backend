@@ -15,7 +15,7 @@ export class TrackingService {
     let sqlQuery = `
         SELECT *
         FROM tracking
-        WHERE user_id = ?;
+        WHERE userId = ?;
     `;
     try {
       const [rows] = await this._database.query<DB_Tracking[]>(sqlQuery, [
