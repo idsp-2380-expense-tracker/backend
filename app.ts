@@ -1,4 +1,5 @@
 import express from "express";
+import { Request, Response } from "express";
 import cors from "cors";
 import apiRouter from "./routes/apiRouter";
 import database from "./database/databaseConnection";
@@ -17,6 +18,7 @@ app.use(
     credentials: true,
   })
 );
+
 // CLERK AUTHENTICATION
 app.use(clerkMiddleware());
 app.use(express.json());
@@ -37,7 +39,7 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.get("/data", requireAuth(), (req, res) =>
+app.get("/data", requireAuth(), async (req: Request, res: Response) =>
   userController.getUserData(req, res)
 );
 

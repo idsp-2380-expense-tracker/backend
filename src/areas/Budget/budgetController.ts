@@ -12,6 +12,7 @@ export class BudgetController {
   public async getBudgets(req: Request): Promise<DB_Budget[] | null> {
     try {
       const userId = req.auth?.userId;
+      console.log(userId);
       // there will always be a userId from Clerk
       return await this._budgetService.getBudgetData(userId!);
     } catch (err) {
