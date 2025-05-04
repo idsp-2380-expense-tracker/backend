@@ -37,7 +37,9 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.get("/", requireAuth(), (req, res) => userController.getUserData(req, res));
+app.get("/data", requireAuth(), (req, res) =>
+  userController.getUserData(req, res)
+);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
