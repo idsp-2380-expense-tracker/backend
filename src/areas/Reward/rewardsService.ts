@@ -1,7 +1,7 @@
 import { Pool } from "mysql2/promise";
 import { DB_Rewards } from "../../shared/databaseInterface";
 import { RewardsDTO } from "../../shared/dtos";
-
+import { pointsUpdate } from "../../shared/dtos";
 export class RewardService {
   private _database: Pool;
 
@@ -16,16 +16,17 @@ export class RewardService {
 		FROM rewards
         WHERE userId = ?;
 	`;
-    try {
-      const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [
-        userId,
-      ]);
-      rows.forEach((row) => RewardsDTO.parse(row));
-      return rows;
-    } catch (err) {
-      console.log("Error selecting from user table");
-      console.log(err);
-      return null;
-    }
+
+    const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [userId]);
+    rows.forEach((row) => RewardsDTO.parse(row));
+    return rows;
+  }
+  public async updateRewardData(data: pointsUpdate): Promise<void> {
+    let sqlQuery = `
+    UPDATE rewards 
+    SET points = ?
+    WHERE userId = ?;
+    `;
+    await this._database.query(sqlQuery, [data.points, data.id]);
   }
 }

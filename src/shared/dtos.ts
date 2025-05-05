@@ -37,7 +37,11 @@ export const UserDTO = z.object({
   budget: z.array(BudgetDTO).default([]),
   rewards: z.array(RewardsDTO).default([]),
 });
-
+export const pointsUpdateSchema = z.object({
+  id: z.string(),
+  points: z.number(),
+});
+export type pointsUpdate = z.TypeOf<typeof pointsUpdateSchema>;
 export type IBudget = z.infer<typeof BudgetDTO>;
 export type ITracking = z.infer<typeof TrackingDTO>;
 export type IRewards = z.infer<typeof RewardsDTO>;

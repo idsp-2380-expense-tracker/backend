@@ -1,8 +1,9 @@
 import database from "../../../database/databaseConnection";
 import { DB_Rewards } from "../../shared/databaseInterface";
 import { RewardService } from "./rewardsService";
-import { Request } from "express";
-
+import { Request, Response } from "express";
+import { pointsUpdate, pointsUpdateSchema } from "../../shared/dtos";
+import { z } from "zod";
 export class RewardController {
   private _rewardService: RewardService;
 
@@ -17,6 +18,28 @@ export class RewardController {
     } catch (err) {
       console.log(err);
       return null;
+    }
+  }
+  public async updateRewards(req: Request, res: Response): Promise<void> {
+    try {
+      const userId = req.auth?.userId;
+      const { points } = req.body;
+
+      const data: pointsUpdate = pointsUpdateSchema.parse({
+        id: userId!,
+        points: points,
+      });
+
+      await this._rewardService.updateRewardData(data);
+      res
+        .status(200)
+        .json({ success: true, message: "points succesfully updated" });
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        res.status(400).json({ error: "invalid request data" });
+      }
+      console.log("Failed to update rewards:", error);
+      res.status(500).json({ error: "server error" });
     }
   }
 }
