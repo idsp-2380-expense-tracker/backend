@@ -1,5 +1,6 @@
 import { Pool } from "mysql2/promise";
 import { DB_Tracking } from "../../shared/databaseInterface";
+import { TrackingDTO } from "../../shared/dtos";
 
 export class TrackingService {
   private _database: Pool;
@@ -21,6 +22,8 @@ export class TrackingService {
       const [rows] = await this._database.query<DB_Tracking[]>(sqlQuery, [
         userId,
       ]);
+
+      rows.forEach((row) => TrackingDTO.parse(row));
       return rows;
     } catch (err) {
       console.log("Error selecting from tracking table");

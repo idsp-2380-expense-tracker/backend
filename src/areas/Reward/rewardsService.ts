@@ -1,5 +1,6 @@
 import { Pool } from "mysql2/promise";
 import { DB_Rewards } from "../../shared/databaseInterface";
+import { RewardsDTO } from "../../shared/dtos";
 
 export class RewardService {
   private _database: Pool;
@@ -19,6 +20,7 @@ export class RewardService {
       const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [
         userId,
       ]);
+      rows.forEach((row) => RewardsDTO.parse(row));
       return rows;
     } catch (err) {
       console.log("Error selecting from user table");
