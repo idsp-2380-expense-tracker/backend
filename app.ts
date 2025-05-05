@@ -1,10 +1,9 @@
 import express from "express";
+import { Request, Response } from "express";
 import cors from "cors";
-import apiRouter from "./routes/apiRouter";
-import db from "./database/databaseConnection";
-import { getUserData } from "./database/databaseAccessLayer";
-import { clerkMiddleware } from "@clerk/express";
-
+import apiRouter from "./src/areas/apiRouter";
+import database from "./database/databaseConnection";
+import { clerkMiddleware, requireAuth } from "@clerk/express";
 import "dotenv/config";
 
 const port = 3000;
@@ -18,17 +17,19 @@ app.use(
     credentials: true,
   })
 );
+
 // CLERK AUTHENTICATION
 app.use(clerkMiddleware());
 app.use(express.json());
+
+app.use("/api", apiRouter);
 
 async function printMySQLVersion() {
   let sqlQuery = `
           SHOW VARIABLES LIKE 'version';
       `;
-
   try {
-    const results = await db.query(sqlQuery);
+    const results = await database.query(sqlQuery);
     console.log("Successfully connected to MySQL");
     console.log(results[0]);
     return true;
@@ -39,12 +40,10 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.use("/api", apiRouter);
-
-app.get("/", async (req, res) => {
-  const userData = await getUserData(1);
-  res.json(userData);
+app.get("/", (req, res) => {
+  res.send("NOOOoo");
 });
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
