@@ -5,6 +5,6 @@ const router = Router();
 
 export default router;
 
-router.post("/", requireAuth(), (req, res) => {
-  rewardController.updateRewards(req, res);
+router.post("/", requireAuth(), async (req, res) => {
+  await rewardController.updateRewards(req, res);
 });
