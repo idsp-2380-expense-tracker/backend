@@ -12,7 +12,7 @@ const app = express();
 // CORS
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://frontend-zyfs.onrender.com"],
     optionsSuccessStatus: 200,
     credentials: true,
   })
