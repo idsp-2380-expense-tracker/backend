@@ -28,5 +28,6 @@ export class RewardService {
     WHERE userId = ?;
     `;
     await this._database.query(sqlQuery, [data.points, data.id]);
+    console.log("succesfully updated data");
   }
 }
