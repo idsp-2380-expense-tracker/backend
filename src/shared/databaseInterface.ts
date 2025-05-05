@@ -8,3 +8,5 @@ export interface DB_Budget extends IBudget, RowDataPacket {}
 export interface DB_Rewards extends IRewards, RowDataPacket {}
 
 export interface DB_User extends IUser, RowDataPacket {}
+
+export interface hi {}
