@@ -1,0 +1,19 @@
+import { Router } from "express";
+const router = Router();
+
+router.get("/", (req, res) => {
+  res.json({
+    "0": {
+      age: 20,
+      goalAmount: 1000,
+      fk_userData: 0,
+    },
+
+    "1": {
+      age: 25,
+      goalAmount: 2000,
+      fk_userData: 0,
+    },
+  });
+});
+export default router;

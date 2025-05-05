@@ -1,12 +1,11 @@
 import express from "express";
 import { Request, Response } from "express";
 import cors from "cors";
-import apiRouter from "./routes/apiRouter";
+import apiRouter from "./src/areas/apiRouter";
 import database from "./database/databaseConnection";
 import { clerkMiddleware, requireAuth } from "@clerk/express";
 import "dotenv/config";
 
-import { userController } from "./src/areas/User/userController";
 const port = 3000;
 
 const app = express();
@@ -22,6 +21,8 @@ app.use(
 // CLERK AUTHENTICATION
 app.use(clerkMiddleware());
 app.use(express.json());
+
+app.use("/api", apiRouter);
 
 async function printMySQLVersion() {
   let sqlQuery = `
@@ -39,12 +40,9 @@ async function printMySQLVersion() {
 }
 printMySQLVersion();
 
-app.get(
-  "/data",
-  requireAuth(),
-  async (req: Request, res: Response) =>
-    await userController.getUserData(req, res)
-);
+app.get("/", (req, res) => {
+  res.send("NOOOoo");
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
