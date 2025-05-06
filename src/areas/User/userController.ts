@@ -22,15 +22,11 @@ class UserController {
       this._rewardController.getRewards(req),
       this._trackingController.getReceipts(req),
     ]);
-    const userData = {
+
+    res.status(200).json({
       budget,
       rewards,
       tracking,
-    } as DB_User;
-    console.log(userData);
-
-    res.status(200).json({
-      userData,
     });
   }
 }
