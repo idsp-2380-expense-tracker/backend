@@ -15,14 +15,14 @@ export const BudgetDTO = z.object({
 
 export const TrackingDTO = z.object({
   id: z.coerce.number(),
-  category: z.coerce.string(),
-  paymentMethod: z.coerce.string(),
+  category: z.string(),
+  paymentMethod: z.string(),
   amount: z.coerce.number(),
-  dateOfPayment: z.coerce.string(),
+  dateOfPayment: z.string(),
   repeat: z.preprocess((val) => Boolean(Number(val)), z.boolean()),
-  title: z.coerce.string().optional(),
-  note: z.coerce.string().optional(),
-  createdAt: z.coerce.string().datetime(),
+  title: z.string().optional(),
+  note: z.string().optional(),
+  createdAt: z.string().datetime(),
   userId: z.coerce.number(),
 });
 
