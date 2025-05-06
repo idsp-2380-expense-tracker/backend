@@ -20,13 +20,14 @@ export class RewardService {
     const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [userId]);
     return rows[0];
   }
+
   public async updateRewardData(data: pointsUpdate): Promise<void> {
     let sqlQuery = `
-    UPDATE rewards 
-    SET points = ?
-    WHERE userId = ?;
+    INSERT INTO rewards (userId, points)
+    VALUES (?, ?)
+    ON DUPLICATE KEY UPDATE points = VALUES(points);
     `;
-    await this._database.query(sqlQuery, [data.points, data.id]);
+    await this._database.query(sqlQuery, [data.id, data.points]);
     console.log("succesfully updated data");
   }
 }
