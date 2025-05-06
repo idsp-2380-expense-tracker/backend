@@ -7,6 +7,7 @@ import { RewardController } from "../Reward/rewardsController";
 import { budgetController } from "../Budget/budgetController";
 import { trackingController } from "../Receipt/receiptController";
 import { rewardController } from "../Reward/rewardsController";
+import { DB_User } from "../../shared/databaseInterface";
 
 class UserController {
   constructor(
@@ -21,11 +22,14 @@ class UserController {
       this._rewardController.getRewards(req),
       this._trackingController.getReceipts(req),
     ]);
+    const userData = {
+      budget: budget ?? [],
+      rewards,
+      tracking: tracking ?? [],
+    } as DB_User;
 
     res.status(200).json({
-      budget,
-      rewards,
-      tracking,
+      userData,
     });
   }
 }
