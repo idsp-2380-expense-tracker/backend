@@ -9,7 +9,7 @@ export const BudgetDTO = z.object({
   needs: z.number(),
   wants: z.number(),
   save: z.number(),
-  createdAt: z.string().datetime(),
+  createdAt: z.date(),
   userId: z.number(),
 });
 
@@ -17,19 +17,19 @@ export const TrackingDTO = z.object({
   id: z.number(),
   category: z.string(),
   paymentMethod: z.string(),
-  amount: z.string(),
-  dateOfPayment: z.string(),
-  repeat: z.number().int().min(0).max(1),
+  amount: z.number(),
+  dateOfPayment: z.date(),
+  repeat: z.preprocess((val) => Boolean(Number(val)), z.boolean()),
   title: z.string().optional(),
   note: z.string().optional(),
-  createdAt: z.string().datetime(),
+  createdAt: z.date(),
   userId: z.number(),
 });
 
 export const RewardsDTO = z.object({
   id: z.number(),
   points: z.number(),
-  createdAt: z.string().datetime(),
+  createdAt: z.date(),
   userId: z.number(),
 });
 export const UserDTO = z.object({
