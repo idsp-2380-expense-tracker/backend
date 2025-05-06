@@ -10,7 +10,7 @@ export class RewardController {
   constructor(rewardService: RewardService) {
     this._rewardService = rewardService;
   }
-  public async getRewards(req: Request): Promise<DB_Rewards[] | null> {
+  public async getRewards(req: Request): Promise<DB_Rewards | null> {
     try {
       const userId = req.auth?.userId;
       // there will always be a userId from Clerk

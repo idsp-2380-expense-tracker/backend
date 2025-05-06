@@ -8,7 +8,7 @@ export class RewardService {
   constructor(dbConnection: Pool) {
     this._database = dbConnection;
   }
-  public async getRewardData(userId: string): Promise<DB_Rewards[] | null> {
+  public async getRewardData(userId: string): Promise<DB_Rewards | null> {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
@@ -18,7 +18,7 @@ export class RewardService {
 	`;
 
     const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [userId]);
-    return rows;
+    return rows[0];
   }
   public async updateRewardData(data: pointsUpdate): Promise<void> {
     let sqlQuery = `
