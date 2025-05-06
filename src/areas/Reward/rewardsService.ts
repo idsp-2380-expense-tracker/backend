@@ -12,7 +12,7 @@ export class RewardService {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
-		SELECT *
+		SELECT points,userId
 		FROM rewards
         WHERE userId = ?;
 	`;

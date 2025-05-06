@@ -12,7 +12,7 @@ export const BudgetDTO = z.object({
   createdAt: z.date(),
   userId: z.number(),
 });
-
+export const PartialBudgetDTO = BudgetDTO.omit({ id: true, createdAt: true });
 export const TrackingDTO = z.object({
   id: z.number(),
   category: z.string(),
@@ -25,24 +25,28 @@ export const TrackingDTO = z.object({
   createdAt: z.date(),
   userId: z.number(),
 });
-
+export const PartialTrackingDTO = TrackingDTO.omit({
+  id: true,
+  createdAt: true,
+});
 export const RewardsDTO = z.object({
   id: z.number(),
   points: z.number(),
   createdAt: z.date(),
   userId: z.number(),
 });
+export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
   tracking: z.array(TrackingDTO).default([]),
   budget: z.array(BudgetDTO).default([]),
-  rewards: z.array(RewardsDTO).default([]),
+  rewards: BudgetDTO,
 });
 export const pointsUpdateSchema = z.object({
   id: z.string(),
   points: z.number(),
 });
 export type pointsUpdate = z.TypeOf<typeof pointsUpdateSchema>;
-export type IBudget = z.infer<typeof BudgetDTO>;
-export type ITracking = z.infer<typeof TrackingDTO>;
-export type IRewards = z.infer<typeof RewardsDTO>;
+export type IPartialBudget = z.infer<typeof PartialBudgetDTO>;
+export type IPartialTracking = z.infer<typeof PartialTrackingDTO>;
+export type IPartialRewards = z.infer<typeof PartialRewardsDTO>;
 export type IUser = z.infer<typeof UserDTO>;

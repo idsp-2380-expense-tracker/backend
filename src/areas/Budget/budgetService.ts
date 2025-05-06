@@ -11,7 +11,7 @@ export class BudgetService {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
-        SELECT *
+        SELECT age, goalAmount, income, periodRange, needs, wants,save,userId
         FROM budget
         WHERE userId = ?;
     `;
