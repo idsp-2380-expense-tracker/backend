@@ -21,6 +21,7 @@ export class TrackingService {
       const [rows] = await this._database.query<DB_Tracking[]>(sqlQuery, [
         userId,
       ]);
+      console.log(rows);
       return rows;
     } catch (err) {
       console.log("Error selecting from tracking table");
