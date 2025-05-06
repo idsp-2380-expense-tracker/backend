@@ -1,36 +1,36 @@
 import { z } from "zod";
 
 export const BudgetDTO = z.object({
-  id: z.coerce.number(),
-  age: z.coerce.number(),
-  goalAmount: z.coerce.number(),
-  income: z.coerce.number(),
+  id: z.number(),
+  age: z.number(),
+  goalAmount: z.number(),
+  income: z.number(),
   periodRange: z.string(),
-  needs: z.coerce.number(),
-  wants: z.coerce.number(),
-  save: z.coerce.number(),
-  createdAt: z.coerce.string().datetime(),
-  userId: z.coerce.number(),
+  needs: z.number(),
+  wants: z.number(),
+  save: z.number(),
+  createdAt: z.string().datetime(),
+  userId: z.number(),
 });
 
 export const TrackingDTO = z.object({
-  id: z.coerce.number(),
+  id: z.number(),
   category: z.string(),
   paymentMethod: z.string(),
-  amount: z.coerce.number(),
+  amount: z.string(),
   dateOfPayment: z.string(),
-  repeat: z.preprocess((val) => Boolean(Number(val)), z.boolean()),
+  repeat: z.number().int().min(0).max(1),
   title: z.string().optional(),
   note: z.string().optional(),
   createdAt: z.string().datetime(),
-  userId: z.coerce.number(),
+  userId: z.number(),
 });
 
 export const RewardsDTO = z.object({
-  id: z.coerce.number(),
-  points: z.coerce.number(),
-  createdAt: z.coerce.string().datetime(),
-  userId: z.coerce.number(),
+  id: z.number(),
+  points: z.number(),
+  createdAt: z.string().datetime(),
+  userId: z.number(),
 });
 export const UserDTO = z.object({
   tracking: z.array(TrackingDTO).default([]),

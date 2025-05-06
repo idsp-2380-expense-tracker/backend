@@ -16,17 +16,16 @@ class UserController {
   ) {}
 
   public async getUserData(req: Request, res: Response) {
-    // const [budget, rewards, receipts] = await Promise.all([
-    //   this._budgetController.getBudgets(req),
-    //   this._rewardController.getRewards(req),
-    //   this._trackingController.getReceipts(req),
-    // ]);
-    const budget = await this._budgetController.getBudgets(req);
+    const [budget, rewards, receipts] = await Promise.all([
+      this._budgetController.getBudgets(req),
+      this._rewardController.getRewards(req),
+      this._trackingController.getReceipts(req),
+    ]);
 
     res.status(200).json({
       budget,
-      // rewards,
-      // receipts,
+      rewards,
+      receipts,
     });
   }
 }
