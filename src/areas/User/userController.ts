@@ -16,7 +16,7 @@ class UserController {
   ) {}
 
   public async getUserData(req: Request, res: Response) {
-    const [budget, rewards, receipts] = await Promise.all([
+    const [budget, rewards, tracking] = await Promise.all([
       this._budgetController.getBudgets(req),
       this._rewardController.getRewards(req),
       this._trackingController.getReceipts(req),
@@ -25,7 +25,7 @@ class UserController {
     res.status(200).json({
       budget,
       rewards,
-      receipts,
+      tracking,
     });
   }
 }

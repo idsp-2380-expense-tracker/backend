@@ -13,7 +13,7 @@ export class TrackingService {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
-        SELECT *
+        SELECT category, paymentMethod, amount, dateOfPayment, \`repeat\`, title, note, userId
         FROM tracking
         WHERE userId = ?;
     `;

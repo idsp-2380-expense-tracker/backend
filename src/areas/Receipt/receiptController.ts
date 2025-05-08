@@ -19,6 +19,7 @@ export class TrackingController {
       return null;
     }
   }
+  
 }
 const trackingService = new TrackingService(database);
 export const trackingController = new TrackingController(trackingService);
