@@ -3,6 +3,7 @@ import { Router } from "express";
 const router = Router();
 
 router.post("/", requireAuth(), (req, res) => {
-  console.log(req.body);
+  const { payload } = req.body;
+  console.log(payload);
 });
 export default router;
