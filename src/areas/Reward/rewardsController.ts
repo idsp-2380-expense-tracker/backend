@@ -24,7 +24,6 @@ export class RewardController {
     try {
       const userId = req.auth?.userId;
       const { points } = req.body;
-      console.log(userId, points);
 
       const data: pointsUpdate = pointsUpdateSchema.parse({
         id: userId!,

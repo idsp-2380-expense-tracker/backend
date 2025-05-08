@@ -38,16 +38,16 @@ export class RewardService {
     const user = await clerkClient.users.getUser(userId);
     const lastSignIn = new Date(user.lastSignInAt!).toISOString().slice(0, 10);
 
-    if (today === lastSignIn) return;
-
     // compares how many days is apart from today vs lastSignIn
     const daysSinceLastLogin = Math.floor(
       (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
         (1000 * 60 * 60 * 24)
     );
 
-    const previousStreak: number =
-      (user.publicMetadata as any).loginStreak || 0;
+    const publicMetadata = user.publicMetadata as any;
+    const previousStreak = publicMetadata.loginSTreak ?? null;
+
+    if (previousStreak !== null && today === lastSignIn) return;
 
     const newStreak = daysSinceLastLogin === 1 ? previousStreak + 1 : 1;
 
