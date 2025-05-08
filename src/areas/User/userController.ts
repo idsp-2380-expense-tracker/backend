@@ -7,7 +7,6 @@ import { RewardController } from "../Reward/rewardsController";
 import { budgetController } from "../Budget/budgetController";
 import { trackingController } from "../Receipt/receiptController";
 import { rewardController } from "../Reward/rewardsController";
-import { DB_User } from "../../shared/databaseInterface";
 
 class UserController {
   constructor(

@@ -1,7 +1,8 @@
 import { Pool } from "mysql2/promise";
 import { DB_Rewards } from "../../shared/databaseInterface";
-
 import { pointsUpdate } from "../../shared/dtos";
+import { Request } from "express";
+import { clerkClient } from "@clerk/express";
 export class RewardService {
   private _database: Pool;
 
@@ -29,5 +30,30 @@ export class RewardService {
     `;
     await this._database.query(sqlQuery, [data.id, data.points]);
     console.log("succesfully updated data");
+  }
+
+  public async updateStreak(req: Request): Promise<void> {
+    const today = new Date().toISOString().slice(0, 10);
+    const userId = req.auth?.userId!;
+    const user = await clerkClient.users.getUser(userId);
+    const lastSignIn = new Date(user.lastSignInAt!).toISOString().slice(0, 10);
+
+    if (today === lastSignIn) return;
+
+    // compares how many days is apart from today vs lastSignIn
+    const daysSinceLastLogin = Math.floor(
+      (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
+        (1000 * 60 * 60 * 24)
+    );
+
+    const previousStreak: number =
+      (user.publicMetadata as any).loginStreak || 0;
+
+    const newStreak = daysSinceLastLogin === 1 ? previousStreak + 1 : 1;
+
+    await clerkClient.users.updateUserMetadata(userId, {
+      publicMetadata: { loginStreak: newStreak },
+    });
+    console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
 }
