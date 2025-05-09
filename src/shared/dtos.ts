@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const BudgetDTO = z.object({
-  age: z.number().nonnegative().nullable(),
-  goalAmount: z.number().nonnegative().nullable(),
+  age: z.number().nonnegative().nullable().default(null),
+  goalAmount: z.number().nonnegative().nullable().default(null),
   income: z.number().nonnegative(),
   periodRange: z.string(),
   needs: z.number().nonnegative(),
