@@ -9,7 +9,7 @@ export class BudgetController {
   constructor(budgetService: BudgetService) {
     this._budgetService = budgetService;
   }
-  public async getBudgets(req: Request): Promise<DB_Budget[] | null> {
+  public async getBudgets(req: Request): Promise<DB_Budget | null> {
     try {
       const userId = req.auth?.userId;
       // there will always be a userId from Clerk
@@ -18,6 +18,11 @@ export class BudgetController {
       console.log(err);
       return null;
     }
+  }
+  public async updateBudget(req: Request, res: Response): Promise<void> {
+    try {
+      await this._budgetService.updateBudgetData(req);
+    } catch {}
   }
 }
 

@@ -38,7 +38,7 @@ export const RewardsDTO = z.object({
 export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
   tracking: z.array(TrackingDTO).default([]),
-  budget: z.array(BudgetDTO).default([]),
+  budget: BudgetDTO.nullable(),
   rewards: RewardsDTO.nullable(),
 });
 export const pointsUpdateSchema = z.object({
@@ -48,6 +48,7 @@ export const pointsUpdateSchema = z.object({
 
 export type pointsUpdate = z.TypeOf<typeof pointsUpdateSchema>;
 export type IPartialBudget = z.infer<typeof PartialBudgetDTO>;
+export type IBudget = z.infer<typeof BudgetDTO>;
 export type IPartialTracking = z.infer<typeof PartialTrackingDTO>;
 export type IPartialRewards = z.infer<typeof PartialRewardsDTO>;
 export type IUser = z.infer<typeof UserDTO>;
