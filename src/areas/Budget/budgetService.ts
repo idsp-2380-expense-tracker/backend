@@ -1,6 +1,7 @@
 import { Pool } from "mysql2/promise";
 import { DB_Budget, Full_DB_Budget } from "../../shared/databaseInterface";
 import { Request } from "express";
+import { BudgetDTO } from "../../shared/dtos";
 export class BudgetService {
   private _database: Pool;
 
@@ -26,5 +27,43 @@ export class BudgetService {
       return null;
     }
   }
-  public async updateBudgetData(req: Request) {}
+  public async updateBudgetData(req: Request) {
+    const userId = req.auth.userId;
+
+    const parsed = BudgetDTO.safeParse(req.body);
+
+    if (!parsed.success) {
+      throw new Error("Invalid input");
+    }
+
+    const { age, goalAmount, income, needs, periodRange, save, wants } =
+      parsed.data;
+
+    if (needs + save + wants !== income) {
+      throw new Error(`needs save wants doesn't add up to 100`);
+    }
+    let sqlQuery = `
+    INSERT INTO budget (age, goalAmount, income, periodRange, needs, wants, save, createdAt, userId)
+    VALUES (?, ?, ?, ?, ?, ?, ?, NOW(),?)
+    ON DUPLICATE KEY UPDATE 
+    age = VALUES(age),
+    goalAmount = VALUES(goalAmount),
+    income = VALUES(income),
+    periodRange = VALUES(periodRange),
+    needs = VALUES(needs),
+    wants = VALUES(wants),
+    save = VALUES(save);
+    `;
+
+    await this._database.query(sqlQuery, [
+      age,
+      goalAmount,
+      income,
+      periodRange,
+      needs,
+      wants,
+      save,
+      userId,
+    ]);
+  }
 }

@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const BudgetDTO = z.object({
   id: z.number(),
-  age: z.number(),
-  goalAmount: z.number(),
-  income: z.number(),
+  age: z.number().nonnegative(),
+  goalAmount: z.number().nonnegative(),
+  income: z.number().nonnegative(),
   periodRange: z.string(),
-  needs: z.number(),
-  wants: z.number(),
-  save: z.number(),
-  createdAt: z.date(),
+  needs: z.number().nonnegative(),
+  wants: z.number().nonnegative(),
+  save: z.number().nonnegative(),
+  createdAt: z.date().optional(),
   userId: z.number(),
 });
 export const PartialBudgetDTO = BudgetDTO.omit({
