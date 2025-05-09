@@ -1,7 +1,6 @@
 import { z } from "zod";
 
 export const BudgetDTO = z.object({
-  id: z.number(),
   age: z.number().nonnegative(),
   goalAmount: z.number().nonnegative(),
   income: z.number().nonnegative(),
@@ -9,10 +8,9 @@ export const BudgetDTO = z.object({
   needs: z.number().nonnegative(),
   wants: z.number().nonnegative(),
   save: z.number().nonnegative(),
-  userId: z.number(),
+  userId: z.string(),
 });
 export const PartialBudgetDTO = BudgetDTO.omit({
-  id: true,
   age: true,
   goalAmount: true,
 });
@@ -26,7 +24,7 @@ export const TrackingDTO = z.object({
   title: z.string().optional(),
   note: z.string().optional(),
   createdAt: z.date(),
-  userId: z.number(),
+  userId: z.string(),
 });
 export const PartialTrackingDTO = TrackingDTO.omit({
   id: true,
@@ -36,7 +34,7 @@ export const RewardsDTO = z.object({
   id: z.number(),
   points: z.number(),
   createdAt: z.date(),
-  userId: z.number(),
+  userId: z.string(),
 });
 export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
