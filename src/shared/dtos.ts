@@ -1,18 +1,19 @@
 import { z } from "zod";
 
 export const BudgetDTO = z.object({
-  id: z.number(),
-  age: z.number(),
-  goalAmount: z.number(),
-  income: z.number(),
+  age: z.number().nonnegative(),
+  goalAmount: z.number().nonnegative(),
+  income: z.number().nonnegative(),
   periodRange: z.string(),
-  needs: z.number(),
-  wants: z.number(),
-  save: z.number(),
-  createdAt: z.date(),
-  userId: z.number(),
+  needs: z.number().nonnegative(),
+  wants: z.number().nonnegative(),
+  save: z.number().nonnegative(),
+  userId: z.string(),
 });
-export const PartialBudgetDTO = BudgetDTO.omit({ id: true, createdAt: true });
+export const PartialBudgetDTO = BudgetDTO.omit({
+  age: true,
+  goalAmount: true,
+});
 export const TrackingDTO = z.object({
   id: z.number(),
   category: z.string(),
@@ -23,7 +24,7 @@ export const TrackingDTO = z.object({
   title: z.string().optional(),
   note: z.string().optional(),
   createdAt: z.date(),
-  userId: z.number(),
+  userId: z.string(),
 });
 export const PartialTrackingDTO = TrackingDTO.omit({
   id: true,
@@ -33,12 +34,12 @@ export const RewardsDTO = z.object({
   id: z.number(),
   points: z.number(),
   createdAt: z.date(),
-  userId: z.number(),
+  userId: z.string(),
 });
 export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
   tracking: z.array(TrackingDTO).default([]),
-  budget: z.array(BudgetDTO).default([]),
+  budget: BudgetDTO.nullable(),
   rewards: RewardsDTO.nullable(),
 });
 export const pointsUpdateSchema = z.object({
@@ -48,6 +49,7 @@ export const pointsUpdateSchema = z.object({
 
 export type pointsUpdate = z.TypeOf<typeof pointsUpdateSchema>;
 export type IPartialBudget = z.infer<typeof PartialBudgetDTO>;
+export type IBudget = z.infer<typeof BudgetDTO>;
 export type IPartialTracking = z.infer<typeof PartialTrackingDTO>;
 export type IPartialRewards = z.infer<typeof PartialRewardsDTO>;
 export type IUser = z.infer<typeof UserDTO>;
