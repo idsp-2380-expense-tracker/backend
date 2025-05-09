@@ -9,12 +9,10 @@ export const BudgetDTO = z.object({
   needs: z.number().nonnegative(),
   wants: z.number().nonnegative(),
   save: z.number().nonnegative(),
-  createdAt: z.date().optional(),
   userId: z.number(),
 });
 export const PartialBudgetDTO = BudgetDTO.omit({
   id: true,
-  createdAt: true,
   age: true,
   goalAmount: true,
 });
