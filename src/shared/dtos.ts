@@ -12,7 +12,12 @@ export const BudgetDTO = z.object({
   createdAt: z.date(),
   userId: z.number(),
 });
-export const PartialBudgetDTO = BudgetDTO.omit({ id: true, createdAt: true });
+export const PartialBudgetDTO = BudgetDTO.omit({
+  id: true,
+  createdAt: true,
+  age: true,
+  goalAmount: true,
+});
 export const TrackingDTO = z.object({
   id: z.number(),
   category: z.string(),
