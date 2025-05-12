@@ -42,18 +42,11 @@ export class RewardController {
       res.status(500).json({ error: "server error" });
     }
   }
-  public async checkAndUpdateStreak(
-    req: Request,
-    res: Response
-  ): Promise<void> {
+  public async checkAndUpdateStreak(req: Request): Promise<void> {
     try {
       await this._rewardService.updateStreak(req);
-      res
-        .status(200)
-        .json({ success: true, message: "successfully updated streak" });
     } catch (error) {
       console.log("Failed to update streak:", error);
-      res.status(500).json({ error: "server error" });
     }
   }
 }

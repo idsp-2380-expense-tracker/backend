@@ -11,8 +11,5 @@ router.get(
   async (req: Request, res: Response) =>
     await userController.getUserData(req, res)
 );
-router.post("/login-streak", requireAuth(), async (req, res) => {
-  console.log("It hit the page");
-  await rewardController.checkAndUpdateStreak(req, res);
-});
+
 export default router;
