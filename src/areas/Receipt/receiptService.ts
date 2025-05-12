@@ -28,4 +28,19 @@ export class TrackingService {
       return null;
     }
   }
+  public async deleteTransaction(id: number, userId: string): Promise<void> {
+    let sqlQuery = `
+    DELETE FROM tracking WHERE id = ? AND userId =?
+    `;
+    try {
+      await this._database.query(sqlQuery, [id, userId]);
+      console.log(`Successfully deleted tracking id = ${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  public async editTransaction(data: any, userId: string) {}
+  public async addTransaction(data: any, userId: string): Promise<number> {
+    return 1;
+  }
 }
