@@ -36,18 +36,15 @@ export class BudgetService {
       throw new Error("Invalid input");
     }
 
-    const { age, goalAmount, income, needs, periodRange, save, wants } =
-      parsed.data;
+    const { income, needs, periodRange, save, wants } = parsed.data;
 
     if (needs + save + wants !== income) {
       throw new Error(`needs save wants doesn't add up to 100`);
     }
     let sqlQuery = `
-    INSERT INTO budget (age, goalAmount, income, periodRange, needs, wants, save, createdAt, userId)
-    VALUES (?, ?, ?, ?, ?, ?, ?, NOW(),?)
+    INSERT INTO budget (income, periodRange, needs, wants, save, createdAt, userId)
+    VALUES (?, ?, ?, ?, ?, NOW(),?)
     ON DUPLICATE KEY UPDATE 
-    age = VALUES(age),
-    goalAmount = VALUES(goalAmount),
     income = VALUES(income),
     periodRange = VALUES(periodRange),
     needs = VALUES(needs),
@@ -56,8 +53,6 @@ export class BudgetService {
     `;
 
     await this._database.query(sqlQuery, [
-      age,
-      goalAmount,
       income,
       periodRange,
       needs,

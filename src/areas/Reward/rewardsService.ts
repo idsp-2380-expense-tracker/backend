@@ -43,9 +43,10 @@ export class RewardService {
       (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
         (1000 * 60 * 60 * 24)
     );
-
+    console.log(today, lastSignIn);
     const publicMetadata = user.publicMetadata as any;
-    const previousStreak = publicMetadata.loginSTreak ?? null;
+    const previousStreak = publicMetadata.loginStreak ?? null;
+    console.log(previousStreak);
 
     if (previousStreak !== null && today === lastSignIn) return;
 
@@ -56,4 +57,5 @@ export class RewardService {
     });
     console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
+  public async dailyPoints(req: Request) {}
 }
