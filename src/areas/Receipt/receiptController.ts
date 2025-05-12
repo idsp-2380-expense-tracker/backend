@@ -1,7 +1,7 @@
 import database from "../../../database/databaseConnection";
 import { DB_Tracking } from "../../shared/databaseInterface";
 import { TrackingService } from "./receiptService";
-import { Request } from "express";
+import { Request, Response } from "express";
 
 export class TrackingController {
   private _trackingService: TrackingService;
@@ -19,7 +19,7 @@ export class TrackingController {
       return null;
     }
   }
-  
+  public async postTracking(req: Request, res: Response) {}
 }
 const trackingService = new TrackingService(database);
 export const trackingController = new TrackingController(trackingService);
