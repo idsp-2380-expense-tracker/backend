@@ -17,13 +17,6 @@ app.use(
     credentials: true,
   })
 );
-app.options(
-  "*",
-  cors({
-    origin: "https://frontend-zyfs.onrender.com",
-    credentials: true,
-  })
-);
 
 // CLERK AUTHENTICATION
 app.use(clerkMiddleware());
