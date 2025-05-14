@@ -1,6 +1,7 @@
 import { Pool } from "mysql2/promise";
 import { DB_Tracking } from "../../shared/databaseInterface";
-
+import { ITrackingAdd } from "../../shared/dtos";
+import { ResultSetHeader } from "mysql2/promise";
 export class TrackingService {
   private _database: Pool;
 
@@ -40,7 +41,31 @@ export class TrackingService {
     }
   }
   public async editTransaction(data: any, userId: string) {}
-  public async addTransaction(data: any, userId: string): Promise<number> {
-    return 1;
+  public async addTransaction(
+    data: ITrackingAdd,
+    userId: string
+  ): Promise<number> {
+    let sqlQuery = `
+    INSERT INTO tracking (category, paymentMethod, amount, dateOfPayment, repeat, userId)
+    VALUES (?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+      data.category,
+      data.paymentMethod,
+      data.amount,
+      data.dateOfPayment,
+      data.repeat,
+      userId,
+    ];
+    try {
+      const [result] = await this._database.query<ResultSetHeader>(
+        sqlQuery,
+        values
+      );
+      return result.insertId;
+    } catch (error) {
+      console.error("Failed to insert transaction:", error);
+      throw error;
+    }
   }
 }

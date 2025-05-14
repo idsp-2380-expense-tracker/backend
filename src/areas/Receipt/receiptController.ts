@@ -3,6 +3,7 @@ import database from "../../../database/databaseConnection";
 import { DB_Tracking } from "../../shared/databaseInterface";
 import { TrackingService } from "./receiptService";
 import { Request, Response } from "express";
+import { ITrackingAdd } from "../../shared/dtos";
 
 export class TrackingController {
   private _trackingService: TrackingService;
@@ -36,14 +37,16 @@ export class TrackingController {
     } catch (error) {}
   }
   public async addReceipt(
-    data: any,
+    data: ITrackingAdd,
     userId: string
   ): Promise<number | undefined> {
     try {
       const id = await this._trackingService.addTransaction(data, userId);
       console.log(`Sucessfully added receipt ${id}`);
       return id;
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 const trackingService = new TrackingService(database);

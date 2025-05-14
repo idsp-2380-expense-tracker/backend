@@ -16,7 +16,8 @@ router.post("/", requireAuth(), async (req: Request, res: Response) => {
       const receiptId = await trackingController.addReceipt(data, userId!);
       res.status(201).json({ success: true, action: "added", id: receiptId });
     } else if (id === -1) {
-      await trackingController.deleteReceipt(id, userId!);
+      const { idForDelete } = req.body as { idForDelete: number };
+      await trackingController.deleteReceipt(idForDelete, userId!);
       res.status(200).json({ success: true, action: "deleted" });
     } else {
       await trackingController.editReceipt(data, userId!);

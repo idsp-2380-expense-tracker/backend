@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 export const BudgetDTO = z.object({
   age: z.number().nonnegative().nullable().default(null),
@@ -25,6 +25,13 @@ export const TrackingDTO = z.object({
   note: z.string().optional(),
   createdAt: z.date(),
   userId: z.string(),
+});
+export const AddTrackingDTO = TrackingDTO.omit({
+  id: true,
+  title: true,
+  note: true,
+  userId: true,
+  createdAt: true,
 });
 export const PartialTrackingDTO = TrackingDTO.omit({
   id: true,
@@ -53,3 +60,14 @@ export type IBudget = z.infer<typeof BudgetDTO>;
 export type IPartialTracking = z.infer<typeof PartialTrackingDTO>;
 export type IPartialRewards = z.infer<typeof PartialRewardsDTO>;
 export type IUser = z.infer<typeof UserDTO>;
+
+const TrackingDeleteDTO = z.object({
+  id: z.number(),
+  idForDelete: z.number(),
+});
+const TrackingResponseDTO = z.object({
+  id: z.number(),
+});
+export type ITrackingDelete = z.infer<typeof TrackingDeleteDTO>;
+export type ITrackingResponse = z.infer<typeof TrackingResponseDTO>;
+export type ITrackingAdd = z.infer<typeof AddTrackingDTO>;

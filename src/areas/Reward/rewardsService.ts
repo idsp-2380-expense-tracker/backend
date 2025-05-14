@@ -36,19 +36,26 @@ export class RewardService {
     const today = new Date().toISOString().slice(0, 10);
     const userId = req.auth?.userId!;
     const user = await clerkClient.users.getUser(userId);
-    const lastSignIn = new Date(user.lastSignInAt!).toISOString().slice(0, 10);
+
+    if (!user.lastSignInAt) {
+      console.log("No previous sign-in — starting streak at 1");
+      await clerkClient.users.updateUserMetadata(userId, {
+        publicMetadata: { loginStreak: 1 },
+      });
+      return;
+    }
+    const lastSignIn = new Date(user.lastSignInAt).toISOString().slice(0, 10);
 
     // compares how many days is apart from today vs lastSignIn
     const daysSinceLastLogin = Math.floor(
       (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
         (1000 * 60 * 60 * 24)
     );
-    console.log(today, lastSignIn);
-    const publicMetadata = user.publicMetadata as any;
-    const previousStreak = publicMetadata.loginStreak ?? null;
-    console.log(previousStreak);
+    if (today === lastSignIn) return;
 
-    if (previousStreak !== null && today === lastSignIn) return;
+    const publicMetadata = user.publicMetadata as { loginStreak: number };
+
+    const previousStreak = publicMetadata.loginStreak;
 
     const newStreak = daysSinceLastLogin === 1 ? previousStreak + 1 : 1;
 
