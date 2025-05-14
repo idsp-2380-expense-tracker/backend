@@ -37,33 +37,29 @@ export class RewardService {
     const userId = req.auth?.userId!;
     const user = await clerkClient.users.getUser(userId);
 
-    if (!user.lastSignInAt) {
-      console.log("No previous sign-in — starting streak at 1");
-      await clerkClient.users.updateUserMetadata(userId, {
-        publicMetadata: { loginStreak: 1 },
-      });
-      return;
-    }
-    const lastSignIn = new Date(user.lastSignInAt).toISOString().slice(0, 10);
+    const publicMetadata = user.publicMetadata as {
+      loginStreak?: number;
+      lastStreakDate?: string;
+    };
 
-    if (today === lastSignIn) {
+    if (today === publicMetadata.lastStreakDate) {
       console.log("Already signed in today — no streak update.");
       return;
     }
+
+    const previousStreak = publicMetadata.loginStreak ?? 0;
+
+    const lastDate = publicMetadata.lastStreakDate ?? today;
     // compares how many days is apart from today vs lastSignIn
-    const daysSinceLastLogin = Math.floor(
-      (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
+    const daysSince = Math.floor(
+      (new Date(today).getTime() - new Date(lastDate).getTime()) /
         (1000 * 60 * 60 * 24)
     );
 
-    const publicMetadata = user.publicMetadata as { loginStreak: number };
-
-    const previousStreak = publicMetadata.loginStreak;
-
-    const newStreak = daysSinceLastLogin === 1 ? previousStreak + 1 : 1;
+    const newStreak = daysSince === 1 ? previousStreak + 1 : 1;
 
     await clerkClient.users.updateUserMetadata(userId, {
-      publicMetadata: { loginStreak: newStreak },
+      publicMetadata: { loginStreak: newStreak, lastStreakDate: today },
     });
     console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
