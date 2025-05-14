@@ -14,7 +14,7 @@ export const PartialBudgetDTO = BudgetDTO.omit({
   age: true,
   goalAmount: true,
 });
-export const TrackingDTO = z.object({
+export const BaseTrackingDTO = z.object({
   id: z.number(),
   category: z.string(),
   paymentMethod: z.string(),
@@ -26,14 +26,20 @@ export const TrackingDTO = z.object({
   createdAt: z.date(),
   userId: z.string(),
 });
-export const AddTrackingDTO = TrackingDTO.omit({
+export const EditTrackingDTO = BaseTrackingDTO.omit({
+  title: true,
+  note: true,
+  createdAt: true,
+});
+export const AddTrackingDTO = BaseTrackingDTO.omit({
   id: true,
   title: true,
   note: true,
   userId: true,
   createdAt: true,
 });
-export const PartialTrackingDTO = TrackingDTO.omit({
+
+export const PartialTrackingDTO = BaseTrackingDTO.omit({
   id: true,
   createdAt: true,
 });
@@ -71,3 +77,4 @@ const TrackingResponseDTO = z.object({
 export type ITrackingDelete = z.infer<typeof TrackingDeleteDTO>;
 export type ITrackingResponse = z.infer<typeof TrackingResponseDTO>;
 export type ITrackingAdd = z.infer<typeof AddTrackingDTO>;
+export type ITrackingEdit = z.infer<typeof EditTrackingDTO>;

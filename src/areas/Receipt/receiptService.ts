@@ -1,6 +1,6 @@
 import { Pool } from "mysql2/promise";
 import { DB_Tracking } from "../../shared/databaseInterface";
-import { ITrackingAdd } from "../../shared/dtos";
+import { ITrackingAdd, ITrackingEdit } from "../../shared/dtos";
 import { ResultSetHeader } from "mysql2/promise";
 export class TrackingService {
   private _database: Pool;
@@ -40,7 +40,34 @@ export class TrackingService {
       console.log(error);
     }
   }
-  public async editTransaction(data: any, userId: string) {}
+  public async editTransaction(data: ITrackingEdit) {
+    const sqlQuery = `
+    INSERT INTO tracking (id, userId, category, paymentMethod, amount, dateOfPayment, \`repeat\`)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+    ON DUPLICATE KEY UPDATE
+      category = VALUES(category),
+      paymentMethod = VALUES(paymentMethod),
+      amount = VALUES(amount),
+      dateOfPayment = VALUES(dateOfPayment),
+      \`repeat\` = VALUES(\`repeat\`)
+  `;
+
+    const values = [
+      data.id,
+      data.userId,
+      data.category,
+      data.paymentMethod,
+      data.amount,
+      data.dateOfPayment,
+      data.repeat,
+    ];
+    try {
+      await this._database.query(sqlQuery, values);
+      console.log(`Successfully updated tracking id = ${data.id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
   public async addTransaction(
     data: ITrackingAdd,
     userId: string

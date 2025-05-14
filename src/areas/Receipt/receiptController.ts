@@ -30,9 +30,9 @@ export class TrackingController {
     }
   }
   // fix type for data
-  public async editReceipt(data: any, userId: string): Promise<void> {
+  public async editReceipt(data: any): Promise<void> {
     try {
-      await this._trackingService.editTransaction(data, userId);
+      await this._trackingService.editTransaction(data);
       console.log(`Sucessfully modified receipt ${data.id}`);
     } catch (error) {}
   }
