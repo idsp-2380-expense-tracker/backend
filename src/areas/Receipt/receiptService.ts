@@ -46,7 +46,7 @@ export class TrackingService {
     userId: string
   ): Promise<number> {
     let sqlQuery = `
-    INSERT INTO tracking (category, paymentMethod, amount, dateOfPayment, repeat, userId)
+    INSERT INTO tracking (category, paymentMethod, amount, dateOfPayment, \`repeat\`, userId)
     VALUES (?, ?, ?, ?, ?, ?)
     `;
     const values = [
