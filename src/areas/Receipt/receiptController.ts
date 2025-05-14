@@ -3,7 +3,11 @@ import database from "../../../database/databaseConnection";
 import { DB_Tracking } from "../../shared/databaseInterface";
 import { TrackingService } from "./receiptService";
 import { Request, Response } from "express";
-import { ITrackingAdd, ITrackingResponse } from "../../shared/dtos";
+import {
+  ITrackingAdd,
+  ITrackingEdit,
+  ITrackingResponse,
+} from "../../shared/dtos";
 
 export class TrackingController {
   private _trackingService: TrackingService;
@@ -30,7 +34,7 @@ export class TrackingController {
     }
   }
   // fix type for data
-  public async editReceipt(data: any): Promise<void> {
+  public async editReceipt(data: ITrackingEdit): Promise<void> {
     try {
       await this._trackingService.editTransaction(data);
       console.log(`Sucessfully modified receipt ${data.id}`);
