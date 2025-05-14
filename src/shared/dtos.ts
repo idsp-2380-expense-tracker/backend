@@ -51,7 +51,7 @@ export const RewardsDTO = z.object({
 });
 export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
-  tracking: z.array(TrackingDTO).default([]),
+  tracking: z.array(BaseTrackingDTO).default([]),
   budget: BudgetDTO.nullable(),
   rewards: RewardsDTO.nullable(),
 });
