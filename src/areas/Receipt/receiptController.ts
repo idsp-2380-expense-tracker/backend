@@ -3,7 +3,7 @@ import database from "../../../database/databaseConnection";
 import { DB_Tracking } from "../../shared/databaseInterface";
 import { TrackingService } from "./receiptService";
 import { Request, Response } from "express";
-import { ITrackingAdd } from "../../shared/dtos";
+import { ITrackingAdd, ITrackingResponse } from "../../shared/dtos";
 
 export class TrackingController {
   private _trackingService: TrackingService;
