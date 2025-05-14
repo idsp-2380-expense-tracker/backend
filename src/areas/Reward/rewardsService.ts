@@ -46,12 +46,15 @@ export class RewardService {
     }
     const lastSignIn = new Date(user.lastSignInAt).toISOString().slice(0, 10);
 
+    if (today === lastSignIn) {
+      console.log("Already signed in today — no streak update.");
+      return;
+    }
     // compares how many days is apart from today vs lastSignIn
     const daysSinceLastLogin = Math.floor(
       (new Date(today).getTime() - new Date(lastSignIn).getTime()) /
         (1000 * 60 * 60 * 24)
     );
-    if (today === lastSignIn) return;
 
     const publicMetadata = user.publicMetadata as { loginStreak: number };
 
