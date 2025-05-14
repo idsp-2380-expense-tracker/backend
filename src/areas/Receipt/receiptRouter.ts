@@ -9,8 +9,10 @@ export default router;
 
 router.post("/", requireAuth(), async (req: Request, res: Response) => {
   const userId = req.auth.userId;
+
   const { id } = req.body as { id: number };
   const data = req.body;
+  console.log(data, id, userId);
   try {
     if (id === 0) {
       const receiptId = await trackingController.addReceipt(data, userId!);

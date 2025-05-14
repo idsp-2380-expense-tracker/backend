@@ -11,7 +11,7 @@ const router = Router();
 // router.use("/auth", authRouter);
 // router.use("/calender", calenderRouter);
 router.use("/budget", budgetRouter);
-router.use("/receipts", receiptsRouter);
+router.use("/tracking", receiptsRouter);
 router.use("/rewards", rewardsRouter);
 router.use("/user", userRouter);
 
