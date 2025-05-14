@@ -1,5 +1,5 @@
 import { Pool } from "mysql2/promise";
-import { DB_Budget, Full_DB_Budget } from "../../shared/databaseInterface";
+import { DB_Budget } from "../../shared/databaseInterface";
 import { Request } from "express";
 import { BudgetDTO } from "../../shared/dtos";
 export class BudgetService {
@@ -29,8 +29,8 @@ export class BudgetService {
   }
   public async updateBudgetData(req: Request) {
     const userId = req.auth.userId;
-
-    const parsed = BudgetDTO.safeParse(req.body);
+    const merged = { ...req.body, userId };
+    const parsed = BudgetDTO.safeParse(merged);
 
     if (!parsed.success) {
       throw new Error("Invalid input");
