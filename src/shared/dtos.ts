@@ -40,7 +40,6 @@ export const AddTrackingDTO = BaseTrackingDTO.omit({
 });
 
 export const PartialTrackingDTO = BaseTrackingDTO.omit({
-  id: true,
   createdAt: true,
 });
 export const RewardsDTO = z.object({
