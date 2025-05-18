@@ -49,6 +49,7 @@ export class RewardController {
       console.log("Failed to update streak:", error);
     }
   }
+  public async postDailyPoints(req: Request): Promise<void> {}
 }
 
 const rewardService = new RewardService(database);

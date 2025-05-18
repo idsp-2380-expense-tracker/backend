@@ -13,7 +13,7 @@ export class RewardService {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
-		SELECT points,userId
+		SELECT *
 		FROM rewards
         WHERE userId = ?;
 	`;
@@ -21,7 +21,6 @@ export class RewardService {
     const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [userId]);
     return rows[0];
   }
-
   public async updateRewardData(data: pointsUpdate): Promise<void> {
     let sqlQuery = `
     INSERT INTO rewards (userId, points)
@@ -31,7 +30,6 @@ export class RewardService {
     await this._database.query(sqlQuery, [data.id, data.points]);
     console.log("succesfully updated data");
   }
-
   public async updateStreak(req: Request): Promise<void> {
     const today = new Date().toISOString().slice(0, 10);
     const userId = req.auth?.userId!;
