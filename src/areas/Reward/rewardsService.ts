@@ -93,7 +93,7 @@ export class RewardService {
   public async collectDailyPoints(userId: string): Promise<boolean> {
     let sqlQuery = `
     UPDATE rewards
-    SET points = points + 30,
+    SET points = points + 10,
         dailyCollected = 1
     WHERE userId = ? AND dailyCollected = 0
     `;
@@ -105,7 +105,7 @@ export class RewardService {
     const success = result.affectedRows > 0;
 
     if (success) {
-      console.log("Successfully added 30 points to user:", userId);
+      console.log("Successfully added 10 points to user:", userId);
     } else {
       console.log("User already collected daily points:", userId);
     }

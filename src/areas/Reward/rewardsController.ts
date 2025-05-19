@@ -68,7 +68,7 @@ export class RewardController {
       const success = await this._rewardService.collectDailyPoints(userId!);
 
       if (success) {
-        res.status(200).json({ success: true, message: "30 points awarded!" });
+        res.status(200).json({ success: true, message: "10 points awarded!" });
       } else {
         res.status(400).json({
           success: false,
