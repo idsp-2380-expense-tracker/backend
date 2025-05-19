@@ -83,7 +83,22 @@ export class RewardController {
       console.log("Error in resetCheck:", error);
     }
   }
-  public async redeemDailyPoints(req: Request, res: Response): Promise<void> {}
+  public async redeemDailyPoints(req: Request, res: Response): Promise<void> {
+    const userId = req.auth.userId;
+    try {
+      const success = await this._rewardService.collectDailyPoints(userId!);
+      if (success) {
+        res.status(200).json({ success: true, message: "30 points awarded!" });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({
+          success: false,
+          message: "Something went wrong while redeeming points.",
+        });
+    }
+  }
   public async redeemWeeklyPoints(req: Request): Promise<void> {}
   public async redeemMonthlyPoints(req: Request): Promise<void> {}
 }

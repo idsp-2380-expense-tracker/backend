@@ -1,8 +1,9 @@
-import { Pool } from "mysql2/promise";
+import { FieldPacket, Pool } from "mysql2/promise";
 import { DB_Rewards } from "../../shared/databaseInterface";
 import { pointsUpdate } from "../../shared/dtos";
 import { Request } from "express";
 import { clerkClient } from "@clerk/express";
+import { ResultSetHeader } from "mysql2/promise";
 export class RewardService {
   private _database: Pool;
 
@@ -61,43 +62,53 @@ export class RewardService {
     });
     console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
-  public async dailyPoints(req: Request) {}
-
   public async resetDaily(userId: string) {
-    await this._database.query(
-      `
+    let sqlQuery = `
     UPDATE rewards
     SET dailyCollected = 0,
         dailyLoginCount = 1
     WHERE userId = ?;
-  `,
-      [userId]
-    );
+    `;
+    await this._database.query(sqlQuery, [userId]);
   }
-
   public async resetWeekly(userId: string) {
-    await this._database.query(
-      `
+    let sqlQuery = `
     UPDATE rewards
     SET weeklyCollected = 0,
         weeklyLoginCount = 1
     WHERE userId = ?;
-  `,
-      [userId]
-    );
+  `;
+    await this._database.query(sqlQuery, [userId]);
   }
 
   public async resetMonthly(userId: string) {
-    await this._database.query(
-      `
+    let sqlQuery = `
     UPDATE rewards
     SET monthlyCollected = 0
         monthlyLoginCount = 1
     WHERE userId = ?;
-  `,
-      [userId]
-    );
+  `;
+    await this._database.query(sqlQuery, [userId]);
   }
+  public async collectDailyPoints(userId: string): Promise<boolean> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET points = points + 30,
+        dailyCollected = 1
+    WHERE userId = ? AND dailyCollected = 0
+    `;
+    const [result] = (await this._database.query(sqlQuery, [userId])) as [
+      ResultSetHeader,
+      FieldPacket[]
+    ];
+    const success = result.affectedRows > 0;
+
+    if (success) {
+      console.log("Successfully added 30 points to user:", userId);
+    }
+    return success;
+  }
+
   public getWeek(date: Date): string {
     const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
     const firstDayOfYear = Date.UTC(date.getFullYear(), 0, 1);
