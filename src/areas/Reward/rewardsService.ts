@@ -63,31 +63,41 @@ export class RewardService {
     console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
   public async resetDaily(userId: string) {
+    const today = new Date().toLocaleDateString("en-CA");
+
     let sqlQuery = `
     UPDATE rewards
     SET dailyCollected = 0,
-        dailyLoginCount = 1
+        dailyLoginCount = 1,
+        lastLoginDate = ?
+
     WHERE userId = ?;
     `;
-    await this._database.query(sqlQuery, [userId]);
+    await this._database.query(sqlQuery, [today, userId]);
   }
   public async resetWeekly(userId: string) {
+    const today = new Date().toLocaleDateString("en-CA");
+
     let sqlQuery = `
     UPDATE rewards
     SET weeklyCollected = 0,
-        weeklyLoginCount = 1
+        weeklyLoginCount = 1,
+        lastLoginDate = ?
     WHERE userId = ?;
   `;
-    await this._database.query(sqlQuery, [userId]);
+    await this._database.query(sqlQuery, [today, userId]);
   }
   public async resetMonthly(userId: string) {
+    const today = new Date().toLocaleDateString("en-CA");
+
     let sqlQuery = `
     UPDATE rewards
     SET monthlyCollected = 0
-        monthlyLoginCount = 1
+        monthlyLoginCount = 1,
+        lastLoginDate = ?
     WHERE userId = ?;
   `;
-    await this._database.query(sqlQuery, [userId]);
+    await this._database.query(sqlQuery, [today, userId]);
   }
   public async collectDailyPoints(userId: string): Promise<boolean> {
     let sqlQuery = `

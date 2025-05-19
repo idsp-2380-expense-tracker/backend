@@ -17,7 +17,7 @@ class UserController {
 
   public async getUserData(req: Request, res: Response) {
     await this._rewardController.checkAndUpdateStreak(req);
-    await this._rewardController.resetCheck(req);
+    await rewardController.resetCheck(req);
 
     const [budget, rewards, tracking] = await Promise.all([
       this._budgetController.getBudgets(req),
