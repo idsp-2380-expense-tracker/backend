@@ -62,4 +62,46 @@ export class RewardService {
     console.log(`Updated login streak to ${newStreak} for user ${userId}`);
   }
   public async dailyPoints(req: Request) {}
+
+  public async resetDaily(userId: string) {
+    await this._database.query(
+      `
+    UPDATE rewards
+    SET dailyCollected = 0,
+        dailyLoginCount = 1
+    WHERE userId = ?;
+  `,
+      [userId]
+    );
+  }
+
+  public async resetWeekly(userId: string) {
+    await this._database.query(
+      `
+    UPDATE rewards
+    SET weeklyCollected = 0,
+        weeklyLoginCount = 1
+    WHERE userId = ?;
+  `,
+      [userId]
+    );
+  }
+
+  public async resetMonthly(userId: string) {
+    await this._database.query(
+      `
+    UPDATE rewards
+    SET monthlyCollected = 0
+        monthlyLoginCount = 1
+    WHERE userId = ?;
+  `,
+      [userId]
+    );
+  }
+  public getWeek(date: Date): string {
+    const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+    const firstDayOfYear = Date.UTC(date.getFullYear(), 0, 1);
+    const week = Math.ceil(((utc - firstDayOfYear) / 86400000 + 1) / 7);
+    return `${date.getFullYear()}-W${String(week).padStart(2, "0")}`;
+  }
 }
