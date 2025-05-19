@@ -21,28 +21,7 @@ export class RewardController {
       return null;
     }
   }
-  public async updateRewards(req: Request, res: Response): Promise<void> {
-    try {
-      const userId = req.auth?.userId;
-      const { points } = req.body;
 
-      const data: pointsUpdate = pointsUpdateSchema.parse({
-        id: userId!,
-        points: points,
-      });
-
-      await this._rewardService.updateRewardData(data);
-      res
-        .status(200)
-        .json({ success: true, message: "points succesfully updated" });
-    } catch (error) {
-      if (error instanceof z.ZodError) {
-        res.status(400).json({ error: "invalid request data" });
-      }
-      console.log("Failed to update rewards:", error);
-      res.status(500).json({ error: "server error" });
-    }
-  }
   public async checkAndUpdateStreak(req: Request): Promise<void> {
     try {
       await this._rewardService.updateStreak(req);
