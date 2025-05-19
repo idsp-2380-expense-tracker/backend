@@ -14,7 +14,7 @@ export class RewardService {
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
-		SELECT *
+		SELECT userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount
 		FROM rewards
         WHERE userId = ?;
 	`;
@@ -101,11 +101,15 @@ export class RewardService {
       ResultSetHeader,
       FieldPacket[]
     ];
+
     const success = result.affectedRows > 0;
 
     if (success) {
       console.log("Successfully added 30 points to user:", userId);
+    } else {
+      console.log("User already collected daily points:", userId);
     }
+
     return success;
   }
 

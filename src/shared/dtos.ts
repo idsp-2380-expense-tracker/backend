@@ -47,6 +47,12 @@ export const RewardsDTO = z.object({
   points: z.number(),
   createdAt: z.date(),
   userId: z.string(),
+  dailyCollected: z.boolean(),
+  weeklyCollected: z.boolean(),
+  monthlyCollected: z.boolean(),
+  dailyLoginCount: z.number(),
+  weeklyLoginCount: z.number(),
+  monthlyLoginCount: z.number(),
 });
 export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
 export const UserDTO = z.object({
