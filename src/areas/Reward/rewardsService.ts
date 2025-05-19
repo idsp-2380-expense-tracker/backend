@@ -1,5 +1,5 @@
 import { FieldPacket, Pool } from "mysql2/promise";
-import { DB_Rewards } from "../../shared/databaseInterface";
+import { DB_LastLogin, DB_Rewards } from "../../shared/databaseInterface";
 import { pointsUpdate } from "../../shared/dtos";
 import { Request } from "express";
 import { clerkClient } from "@clerk/express";
@@ -118,5 +118,17 @@ export class RewardService {
     const firstDayOfYear = Date.UTC(date.getFullYear(), 0, 1);
     const week = Math.ceil(((utc - firstDayOfYear) / 86400000 + 1) / 7);
     return `${date.getFullYear()}-W${String(week).padStart(2, "0")}`;
+  }
+  public async getLastLogin(userId: string): Promise<Date> {
+    let sqlQuery = `
+		SELECT lastLoginDate
+		FROM rewards
+        WHERE userId = ?;
+	`;
+
+    const [rows] = await this._database.query<DB_LastLogin[]>(sqlQuery, [
+      userId,
+    ]);
+    return rows[0].lastLoginDate;
   }
 }

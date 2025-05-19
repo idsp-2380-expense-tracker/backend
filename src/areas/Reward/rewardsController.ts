@@ -33,16 +33,14 @@ export class RewardController {
     try {
       const userId = req.auth.userId;
 
-      const user = await clerkClient.users.getUser(userId!);
-      const lastSignInAt = user.lastSignInAt;
-      if (!lastSignInAt) return;
-
       const today = new Date();
-      const lastLogin = new Date(lastSignInAt!);
+      const lastLogin = await this._rewardService.getLastLogin(userId!);
 
       // DAILY
-      const todayDate = today.toISOString().slice(0, 10);
-      const lastLoginDate = lastLogin.toISOString().slice(0, 10);
+      const todayDate = today.toLocaleDateString("en-CA").slice(0, 10);
+      const lastLoginDate = lastLogin.toLocaleDateString("en-CA").slice(0, 10);
+      console.log(todayDate, lastLoginDate);
+
       if (todayDate !== lastLoginDate) {
         await this._rewardService.resetDaily(userId!);
       }
@@ -53,8 +51,8 @@ export class RewardController {
         await this._rewardService.resetWeekly(userId!);
       }
       // MONTHLY
-      const thisMonth = today.toISOString().slice(0, 7);
-      const lastMonth = lastLogin.toISOString().slice(0, 7);
+      const thisMonth = today.toLocaleDateString("en-CA").slice(0, 7);
+      const lastMonth = lastLogin.toLocaleDateString("en-CA").slice(0, 7);
       if (thisMonth !== lastMonth) {
         await this._rewardService.resetMonthly(userId!);
       }

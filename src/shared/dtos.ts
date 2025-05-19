@@ -53,8 +53,25 @@ export const RewardsDTO = z.object({
   dailyLoginCount: z.number(),
   weeklyLoginCount: z.number(),
   monthlyLoginCount: z.number(),
+  lastLoginDate: z.date(),
 });
-export const PartialRewardsDTO = RewardsDTO.omit({ id: true, createdAt: true });
+export const PartialRewardsDTO = RewardsDTO.omit({
+  id: true,
+  createdAt: true,
+  lastLoginDate: true,
+});
+export const lastLoginDTO = RewardsDTO.omit({
+  id: true,
+  points: true,
+  createdAt: true,
+  userId: true,
+  dailyCollected: true,
+  weeklyCollected: true,
+  monthlyCollected: true,
+  dailyLoginCount: true,
+  weeklyLoginCount: true,
+  monthlyLoginCount: true,
+});
 export const UserDTO = z.object({
   tracking: z.array(BaseTrackingDTO).default([]),
   budget: BudgetDTO.nullable(),
@@ -70,6 +87,7 @@ export type IPartialBudget = z.infer<typeof PartialBudgetDTO>;
 export type IBudget = z.infer<typeof BudgetDTO>;
 export type IPartialTracking = z.infer<typeof PartialTrackingDTO>;
 export type IPartialRewards = z.infer<typeof PartialRewardsDTO>;
+export type lastLoginDate = z.infer<typeof lastLoginDTO>;
 export type IUser = z.infer<typeof UserDTO>;
 
 const TrackingDeleteDTO = z.object({
