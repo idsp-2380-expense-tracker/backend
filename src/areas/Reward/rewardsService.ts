@@ -80,7 +80,6 @@ export class RewardService {
   `;
     await this._database.query(sqlQuery, [userId]);
   }
-
   public async resetMonthly(userId: string) {
     let sqlQuery = `
     UPDATE rewards
@@ -130,5 +129,26 @@ export class RewardService {
       userId,
     ]);
     return rows[0].lastLoginDate;
+  }
+  public async hasResetToday(userId: string): Promise<boolean> {
+    const today = new Date().toLocaleDateString("en-CA");
+
+    let sqlQuery = `
+    SELECT lastResetCheck 
+    FROM rewards
+    WHERE userId= ?`;
+    const [rows] = await this._database.query<DB_LastLogin[]>(sqlQuery, [
+      userId,
+    ]);
+
+    return rows[0]?.lastResetCheck === today;
+  }
+
+  public async dailyReset(userId: string): Promise<void> {
+    const today = new Date().toLocaleDateString("en-CA");
+    await this._database.query(
+      `UPDATE rewards SET lastResetCheck = ? WHERE userId = ?`,
+      [today, userId]
+    );
   }
 }

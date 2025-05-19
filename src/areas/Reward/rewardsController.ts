@@ -32,6 +32,8 @@ export class RewardController {
   public async resetCheck(req: Request) {
     try {
       const userId = req.auth.userId;
+      const alreadyReset = await this._rewardService.hasResetToday(userId!);
+      if (alreadyReset) return;
 
       const today = new Date();
       const lastLogin = await this._rewardService.getLastLogin(userId!);
@@ -56,6 +58,8 @@ export class RewardController {
       if (thisMonth !== lastMonth) {
         await this._rewardService.resetMonthly(userId!);
       }
+
+      await this._rewardService.dailyReset(userId!);
     } catch (error) {
       console.log("Error in resetCheck:", error);
     }
