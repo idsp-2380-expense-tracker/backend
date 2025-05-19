@@ -110,18 +110,34 @@ export class RewardService {
       ResultSetHeader,
       FieldPacket[]
     ];
-
-    const success = result.affectedRows > 0;
-
-    if (success) {
-      console.log("Successfully added 10 points to user:", userId);
-    } else {
-      console.log("User already collected daily points:", userId);
-    }
-
-    return success;
+    return result.affectedRows > 0;
   }
-
+  public async collectWeeklyPoints(userId: string): Promise<boolean> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET points = points + 300,
+        weeklyCollected = 1
+    WHERE userId = ? AND weeklyCollected = 0
+  `;
+    const [result] = (await this._database.query(sqlQuery, [userId])) as [
+      ResultSetHeader,
+      FieldPacket[]
+    ];
+    return result.affectedRows > 0;
+  }
+  public async collectMonthlyPoints(userId: string): Promise<boolean> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET points = points + 500,
+        monthlyCollected = 1
+    WHERE userId = ? AND monthlyCollected = 0
+  `;
+    const [result] = (await this._database.query(sqlQuery, [userId])) as [
+      ResultSetHeader,
+      FieldPacket[]
+    ];
+    return result.affectedRows > 0;
+  }
   public getWeek(date: Date): string {
     const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
     const firstDayOfYear = Date.UTC(date.getFullYear(), 0, 1);

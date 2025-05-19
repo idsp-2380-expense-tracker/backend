@@ -33,6 +33,7 @@ export class RewardController {
     try {
       const userId = req.auth.userId;
       const alreadyReset = await this._rewardService.hasResetToday(userId!);
+
       if (alreadyReset) return;
 
       const today = new Date();
@@ -84,8 +85,46 @@ export class RewardController {
       });
     }
   }
-  public async redeemWeeklyPoints(req: Request): Promise<void> {}
-  public async redeemMonthlyPoints(req: Request): Promise<void> {}
+  public async redeemWeeklyPoints(req: Request, res: Response): Promise<void> {
+    const userId = req.auth.userId;
+    try {
+      const success = await this._rewardService.collectWeeklyPoints(userId!);
+
+      if (success) {
+        res.status(200).json({ success: true, message: "300 points awarded!" });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "You’ve already collected your weekly reward.",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
+  public async redeemMonthlyPoints(req: Request, res: Response): Promise<void> {
+    const userId = req.auth.userId;
+    try {
+      const success = await this._rewardService.collectMonthlyPoints(userId!);
+
+      if (success) {
+        res.status(200).json({ success: true, message: "500 points awarded!" });
+      } else {
+        res.status(400).json({
+          success: false,
+          message: "You’ve already collected your monthly reward.",
+        });
+      }
+    } catch (error) {
+      res.status(500).json({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
 }
 
 const rewardService = new RewardService(database);
