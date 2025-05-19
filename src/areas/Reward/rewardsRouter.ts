@@ -10,10 +10,13 @@ router.post("/", requireAuth(), async (req, res) => {
   switch (type) {
     case "daily":
       await rewardController.redeemDailyPoints(req, res);
+      break;
     case "weekly":
       await rewardController.redeemWeeklyPoints(req, res);
+      break;
     case "monthly":
       await rewardController.redeemMonthlyPoints(req, res);
+      break;
     default:
       res.status(400).json({
         success: false,
