@@ -144,7 +144,7 @@ export class RewardService {
   public async addCountWeeklyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  dailyWeeklyCount = dailyWeeklyCount + 1
+    SET WeeklyLoginCount = WeeklyLoginCount + 1
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
@@ -152,7 +152,7 @@ export class RewardService {
   public async addCountMonthlyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  dailyMonthlyCount = dailyMonthlyCount + 1
+    SET  MonthlyLoginCount = MonthlyLoginCount + 1
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
@@ -160,7 +160,7 @@ export class RewardService {
   public async resetWeeklyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  dailyWeeklyCount = 0
+    SET  WeeklyLoginCount = 0
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
@@ -168,7 +168,7 @@ export class RewardService {
   public async resetMonthlyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  dailyMonthlyCount = 0
+    SET  MonthlyLoginCount = 0
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
