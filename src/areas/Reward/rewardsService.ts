@@ -142,10 +142,12 @@ export class RewardService {
     return result.affectedRows > 0;
   }
   public getWeek(date: Date): string {
-    const utc = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-    const firstDayOfYear = Date.UTC(date.getFullYear(), 0, 1);
-    const week = Math.ceil(((utc - firstDayOfYear) / 86400000 + 1) / 7);
-    return `${date.getFullYear()}-W${String(week).padStart(2, "0")}`;
+    const local = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const startOfYear = new Date(local.getFullYear(), 0, 1);
+    const dayDiff = Math.floor((+local - +startOfYear) / 86400000);
+    const week = Math.ceil((dayDiff + startOfYear.getDay() + 1) / 7);
+
+    return `${local.getFullYear()}-W${String(week).padStart(2, "0")}`;
   }
   public async getLastLogin(userId: string): Promise<Date> {
     let sqlQuery = `
