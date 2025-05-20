@@ -131,7 +131,7 @@ export class RewardService {
     let sqlQuery = `
     UPDATE rewards
     SET points = points + 500,
-        monthlyCollected = 1
+        monthlyCollected = 1,
         monthlyLoginCount = 0
     WHERE userId = ? AND monthlyCollected = 0
   `;
