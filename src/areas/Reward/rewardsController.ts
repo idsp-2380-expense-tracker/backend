@@ -124,11 +124,12 @@ export class RewardController {
       });
     }
   }
-  public async streakCheck(req: Request) {
+  public async streakCheck(req: Request): Promise<void> {
     const userId = req.auth.userId;
     try {
       const lastLogin = await this._rewardService.getLastLogin(userId!);
       const today = new Date();
+      console.log(lastLogin, today);
 
       const todayStripped = new Date(
         today.getFullYear(),
@@ -151,8 +152,6 @@ export class RewardController {
         await this._rewardService.resetWeeklyStreak(userId!);
         await this._rewardService.resetMonthlyStreak(userId!);
       }
-
-      console.log(todayStripped, lastLoginStripped, daysSince);
     } catch (error) {}
   }
 }
