@@ -160,7 +160,7 @@ export class RewardService {
   public async resetWeeklyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  WeeklyLoginCount = 0
+    SET  WeeklyLoginCount = 1
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
@@ -168,7 +168,7 @@ export class RewardService {
   public async resetMonthlyStreak(userId: string): Promise<void> {
     let sqlQuery = `
     UPDATE rewards
-    SET  MonthlyLoginCount = 0
+    SET  MonthlyLoginCount = 1
     WHERE userId = ?
     `;
     await this._database.query(sqlQuery, [userId]);
