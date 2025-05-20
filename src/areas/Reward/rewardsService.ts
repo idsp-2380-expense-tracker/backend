@@ -141,6 +141,38 @@ export class RewardService {
     ];
     return result.affectedRows > 0;
   }
+  public async addCountWeeklyStreak(userId: string): Promise<void> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET  dailyWeeklyCount = dailyWeeklyCount + 1
+    WHERE userId = ?
+    `;
+    await this._database.query(sqlQuery, [userId]);
+  }
+  public async addCountMonthlyStreak(userId: string): Promise<void> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET  dailyMonthlyCount = dailyMonthlyCount + 1
+    WHERE userId = ?
+    `;
+    await this._database.query(sqlQuery, [userId]);
+  }
+  public async resetWeeklyStreak(userId: string): Promise<void> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET  dailyWeeklyCount = 0
+    WHERE userId = ?
+    `;
+    await this._database.query(sqlQuery, [userId]);
+  }
+  public async resetMonthlyStreak(userId: string): Promise<void> {
+    let sqlQuery = `
+    UPDATE rewards
+    SET  dailyMonthlyCount = 0
+    WHERE userId = ?
+    `;
+    await this._database.query(sqlQuery, [userId]);
+  }
   public getWeek(date: Date): string {
     const local = new Date(date.getFullYear(), date.getMonth(), date.getDate());
     const startOfYear = new Date(local.getFullYear(), 0, 1);
@@ -174,7 +206,6 @@ export class RewardService {
 
     return rows[0]?.lastResetCheck === today;
   }
-
   public async dailyReset(userId: string): Promise<void> {
     const today = new Date().toLocaleDateString("en-CA");
     await this._database.query(

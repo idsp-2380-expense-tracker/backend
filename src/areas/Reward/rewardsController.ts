@@ -21,7 +21,6 @@ export class RewardController {
       return null;
     }
   }
-
   public async checkAndUpdateStreak(req: Request): Promise<void> {
     try {
       await this._rewardService.updateStreak(req);
@@ -124,6 +123,37 @@ export class RewardController {
         message: "server error",
       });
     }
+  }
+  public async streakCheck(req: Request) {
+    const userId = req.auth.userId;
+    try {
+      const lastLogin = await this._rewardService.getLastLogin(userId!);
+      const today = new Date();
+
+      const todayStripped = new Date(
+        today.getFullYear(),
+        today.getMonth(),
+        today.getDate()
+      );
+      const lastLoginStripped = new Date(
+        lastLogin.getFullYear(),
+        lastLogin.getMonth(),
+        lastLogin.getDate()
+      );
+      const daysSince = Math.floor(
+        (todayStripped.getTime() - lastLoginStripped.getTime()) /
+          (1000 * 60 * 60 * 24)
+      );
+      if (daysSince === 1) {
+        await this._rewardService.addCountWeeklyStreak(userId!);
+        await this._rewardService.addCountMonthlyStreak(userId!);
+      } else if (daysSince > 1) {
+        await this._rewardService.resetWeeklyStreak(userId!);
+        await this._rewardService.resetMonthlyStreak(userId!);
+      }
+
+      console.log(todayStripped, lastLoginStripped, daysSince);
+    } catch (error) {}
   }
 }
 
