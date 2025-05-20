@@ -145,6 +145,7 @@ export class RewardController {
         (todayStripped.getTime() - lastLoginStripped.getTime()) /
           (1000 * 60 * 60 * 24)
       );
+      console.log(daysSince);
       if (daysSince === 1) {
         await this._rewardService.addCountWeeklyStreak(userId!);
         await this._rewardService.addCountMonthlyStreak(userId!);
