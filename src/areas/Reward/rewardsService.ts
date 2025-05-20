@@ -103,7 +103,8 @@ export class RewardService {
     let sqlQuery = `
     UPDATE rewards
     SET points = points + 10,
-        dailyCollected = 1
+        dailyCollected = 1,
+        dailyStreak = 0
     WHERE userId = ? AND dailyCollected = 0
     `;
     const [result] = (await this._database.query(sqlQuery, [userId])) as [
@@ -116,7 +117,8 @@ export class RewardService {
     let sqlQuery = `
     UPDATE rewards
     SET points = points + 300,
-        weeklyCollected = 1
+        weeklyCollected = 1,
+        weeklyStreak = 0
     WHERE userId = ? AND weeklyCollected = 0
   `;
     const [result] = (await this._database.query(sqlQuery, [userId])) as [
@@ -130,6 +132,7 @@ export class RewardService {
     UPDATE rewards
     SET points = points + 500,
         monthlyCollected = 1
+        monthlyStreak = 0
     WHERE userId = ? AND monthlyCollected = 0
   `;
     const [result] = (await this._database.query(sqlQuery, [userId])) as [
