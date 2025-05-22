@@ -11,6 +11,8 @@ export class RewardService {
     this._database = dbConnection;
   }
   public async getRewardData(userId: string): Promise<DB_Rewards | null> {
+    const today = new Date();
+    const todayDateString = today.toISOString().slice(0, 10);
     // throw new Error("Test");
     // put in database logic
     let sqlQuery = `
@@ -24,14 +26,16 @@ export class RewardService {
       return rows[0];
     }
     const newSqlQuery = `
-    INSERT INTO rewards (userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount)
-    VALUES (?, 0, 0, 0, 0, 1, 1, 1)
+    INSERT INTO rewards (userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount, lastLoginDate, lastResetCheck)
+    VALUES (?, 0, 0, 0, 0, 1, 1, 1,?,?)
   `;
     await this._database.query(newSqlQuery, [userId]);
 
     // Re-fetch the newly created row
     const [newRows] = await this._database.query<DB_Rewards[]>(sqlQuery, [
       userId,
+      todayDateString,
+      todayDateString,
     ]);
     return newRows[0] ?? null;
   }
