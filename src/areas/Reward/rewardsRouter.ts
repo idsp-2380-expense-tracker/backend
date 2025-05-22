@@ -6,6 +6,21 @@ const router = Router();
 export default router;
 
 router.post("/", requireAuth(), async (req, res) => {
-  await rewardController.updateRewards(req, res);
+  const { type } = req.body;
+  switch (type) {
+    case "daily":
+      await rewardController.redeemDailyPoints(req, res);
+      break;
+    case "weekly":
+      await rewardController.redeemWeeklyPoints(req, res);
+      break;
+    case "monthly":
+      await rewardController.redeemMonthlyPoints(req, res);
+      break;
+    default:
+      res.status(400).json({
+        success: false,
+        message: "Invalid reward type.",
+      });
+  }
 });
-router.post("/daily", requireAuth(), async (req, res) => {});
