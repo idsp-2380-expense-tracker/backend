@@ -153,7 +153,9 @@ export class RewardController {
         await this._rewardService.resetWeeklyStreak(userId!);
         await this._rewardService.resetMonthlyStreak(userId!);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

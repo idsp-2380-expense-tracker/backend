@@ -20,7 +20,20 @@ export class RewardService {
 	`;
 
     const [rows] = await this._database.query<DB_Rewards[]>(sqlQuery, [userId]);
-    return rows[0];
+    if (rows.length > 0) {
+      return rows[0];
+    }
+    const newSqlQuery = `
+    INSERT INTO rewards (userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount)
+    VALUES (?, 0, 0, 0, 0, 1, 1, 1)
+  `;
+    await this._database.query(newSqlQuery, [userId]);
+
+    // Re-fetch the newly created row
+    const [newRows] = await this._database.query<DB_Rewards[]>(sqlQuery, [
+      userId,
+    ]);
+    return newRows[0] ?? null;
   }
   public async updateRewardData(data: pointsUpdate): Promise<void> {
     let sqlQuery = `
@@ -173,14 +186,6 @@ export class RewardService {
     `;
     await this._database.query(sqlQuery, [userId]);
   }
-  public getWeek(date: Date): string {
-    const local = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    const startOfYear = new Date(local.getFullYear(), 0, 1);
-    const dayDiff = Math.floor((+local - +startOfYear) / 86400000);
-    const week = Math.ceil((dayDiff + startOfYear.getDay() + 1) / 7);
-
-    return `${local.getFullYear()}-W${String(week).padStart(2, "0")}`;
-  }
   public async getLastLogin(userId: string): Promise<Date> {
     let sqlQuery = `
 		SELECT lastLoginDate
@@ -212,5 +217,13 @@ export class RewardService {
       `UPDATE rewards SET lastResetCheck = ? WHERE userId = ?`,
       [today, userId]
     );
+  }
+  public getWeek(date: Date): string {
+    const local = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    const startOfYear = new Date(local.getFullYear(), 0, 1);
+    const dayDiff = Math.floor((+local - +startOfYear) / 86400000);
+    const week = Math.ceil((dayDiff + startOfYear.getDay() + 1) / 7);
+
+    return `${local.getFullYear()}-W${String(week).padStart(2, "0")}`;
   }
 }
