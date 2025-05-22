@@ -26,16 +26,19 @@ export class RewardService {
       return rows[0];
     }
     const newSqlQuery = `
-    INSERT INTO rewards (userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount, lastLoginDate, lastResetCheck)
+    INSERT INTO rewards 
+    (userId, points, dailyCollected, weeklyCollected, monthlyCollected, dailyLoginCount, weeklyLoginCount, monthlyLoginCount, lastLoginDate, lastResetCheck)
     VALUES (?, 0, 0, 0, 0, 1, 1, 1,?,?)
   `;
-    await this._database.query(newSqlQuery, [userId]);
+    await this._database.query(newSqlQuery, [
+      userId,
+      todayDateString,
+      todayDateString,
+    ]);
 
     // Re-fetch the newly created row
     const [newRows] = await this._database.query<DB_Rewards[]>(sqlQuery, [
       userId,
-      todayDateString,
-      todayDateString,
     ]);
     return newRows[0] ?? null;
   }
